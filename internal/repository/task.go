@@ -51,7 +51,7 @@ func (t *TaskRepository) Delete(id int) error {
 	return nil
 }
 
-func (t *TaskRepository) Save(task model.Task) (int, error) {
+func (t *TaskRepository) Create(task model.Task) (int, error) {
 	task.ID = len(t.tasksMap) + 1
 
 	t.tasksMap[task.ID] = task

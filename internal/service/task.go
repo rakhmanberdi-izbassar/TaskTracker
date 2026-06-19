@@ -9,10 +9,10 @@ import (
 )
 
 type TaskService struct {
-	repo *repository.TaskRepository
+	repo repository.TaskRepoInterface
 }
 
-func NewTaskService(taskRepo *repository.TaskRepository) *TaskService {
+func NewTaskService(taskRepo repository.TaskRepoInterface) *TaskService {
 	service := &TaskService{
 		repo: taskRepo,
 	}
@@ -55,7 +55,7 @@ func (ts *TaskService) Create(input model.CreateTaskInput) (int, error) {
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
-	return ts.repo.Save(task)
+	return ts.repo.Create(task)
 }
 
 func (ts *TaskService) Update(id int, input model.UpdateTaskInput) (model.Task, error) {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/config"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/handler"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/repository"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/service"
@@ -12,6 +13,12 @@ import (
 )
 
 func main() {
+
+	config, err := config.NewConfig()
+	if err != nil {
+		return
+	}
+
 	taskRepo := repository.NewTaskRepository()
 	taskService := service.NewTaskService(taskRepo)
 	taskHandler := handler.NewTaskHandler(taskService)
@@ -26,7 +33,7 @@ func main() {
 	router.PUT("/api/tasks/:id", taskHandler.Update)
 
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + config.Port,
 		Handler: router,
 	}
 
