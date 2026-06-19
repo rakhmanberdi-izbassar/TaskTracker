@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	config, err := config.NewConfig()
+	cnf, err := config.NewConfig()
 	if err != nil {
 		return
 	}
@@ -33,7 +33,7 @@ func main() {
 	router.PUT("/api/tasks/:id", taskHandler.Update)
 
 	srv := &http.Server{
-		Addr:    ":" + config.Port,
+		Addr:    ":" + cnf.Port,
 		Handler: router,
 	}
 
