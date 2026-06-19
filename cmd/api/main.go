@@ -20,6 +20,10 @@ func main() {
 
 	router.GET("/api/tasks", taskHandler.GetAll)
 	router.GET("/api/tasks/:id", taskHandler.GetById)
+	router.DELETE("/api/tasks/:id", taskHandler.Delete)
+
+	router.POST("/api/tasks", taskHandler.Create)
+	router.PUT("/api/tasks/:id", taskHandler.Update)
 
 	srv := &http.Server{
 		Addr:    ":8080",
