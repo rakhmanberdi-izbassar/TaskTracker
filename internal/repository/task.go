@@ -3,9 +3,8 @@ package repository
 import (
 	"time"
 
+	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/apperrors"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/model"
-
-	"errors"
 )
 
 type TaskRepository struct {
@@ -37,7 +36,7 @@ func (t *TaskRepository) GetAll() ([]model.Task, error) {
 func (t *TaskRepository) GetById(id int) (model.Task, error) {
 	task, ok := t.tasksMap[id]
 	if !ok {
-		return model.Task{}, errors.New("task not found")
+		return model.Task{}, apperrors.NotFound("Task not found", nil)
 	}
 	return task, nil
 }
@@ -45,7 +44,7 @@ func (t *TaskRepository) GetById(id int) (model.Task, error) {
 func (t *TaskRepository) Delete(id int) error {
 	_, ok := t.tasksMap[id]
 	if !ok {
-		return errors.New("task not found")
+		return apperrors.NotFound("Task not found", nil)
 	}
 	delete(t.tasksMap, id)
 	return nil
@@ -61,7 +60,7 @@ func (t *TaskRepository) Create(task model.Task) (int, error) {
 func (t *TaskRepository) Update(id int, input model.UpdateTaskInput) (model.Task, error) {
 	task, ok := t.tasksMap[id]
 	if !ok {
-		return model.Task{}, errors.New("task not found")
+		return model.Task{}, apperrors.NotFound("Task not found", nil)
 	}
 	if input.Title != nil {
 		task.Title = *input.Title

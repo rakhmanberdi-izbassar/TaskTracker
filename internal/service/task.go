@@ -1,9 +1,9 @@
 package service
 
 import (
-	"errors"
 	"time"
 
+	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/apperrors"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/model"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/repository"
 )
@@ -35,15 +35,18 @@ func (ts *TaskService) GetById(id int) (model.Task, error) {
 }
 
 func (ts *TaskService) Delete(id int) error {
+	if id <= 0 {
+		return apperrors.BadRequest("invalid task id", nil)
+	}
 	return ts.repo.Delete(id)
 }
 
 func (ts *TaskService) Create(input model.CreateTaskInput) (int, error) {
 	if input.Title == "" {
-		return 0, errors.New("title is required")
+		return 0, apperrors.BadRequest("Task title is too short", nil)
 	}
 	if input.Description == "" {
-		return 0, errors.New("description is required")
+		return 0, apperrors.BadRequest("Task description is too short", nil)
 	}
 	task := model.Task{
 		Title:       input.Title,
@@ -61,14 +64,14 @@ func (ts *TaskService) Create(input model.CreateTaskInput) (int, error) {
 func (ts *TaskService) Update(id int, input model.UpdateTaskInput) (model.Task, error) {
 	_, err := ts.repo.GetById(id)
 	if err != nil {
-		return model.Task{}, errors.New("task not found")
+		return model.Task{}, apperrors.NotFound("Task not found", nil)
 	}
 
 	if input.Title != nil && *input.Title == "" {
-		return model.Task{}, errors.New("title is required")
+		return model.Task{}, apperrors.BadRequest("Task title is too short", nil)
 	}
 	if input.Description != nil && *input.Description == "" {
-		return model.Task{}, errors.New("description is required")
+		return model.Task{}, apperrors.BadRequest("Task description is too short", nil)
 	}
 
 	return ts.repo.Update(id, input)

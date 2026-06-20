@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/apperrors"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/model"
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/service"
 
@@ -33,12 +34,12 @@ func (th *TaskHandler) GetById(c *gin.Context) {
 	id, err := strconv.Atoi(idStr)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
+		respondWithError(c, apperrors.BadRequest("invalid ID parameter", nil))
 		return
 	}
 	task, err := th.service.GetById(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		respondWithError(c, apperrors.NotFound("task not found", nil))
 	}
 	c.JSON(http.StatusOK, task)
 }
@@ -47,7 +48,7 @@ func (th *TaskHandler) Delete(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
+		respondWithError(c, apperrors.BadRequest("invalid ID parameter", nil))
 		return
 	}
 	err = th.service.Delete(id)
@@ -59,14 +60,14 @@ func (th *TaskHandler) Create(c *gin.Context) {
 	err := c.ShouldBindJSON(&input)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad json data"})
+		respondWithError(c, apperrors.BadRequest("invalid input body", err))
 		return
 	}
 
 	newId, err := th.service.Create(input)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Some error "})
+		respondWithError(c, err)
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"id": newId})
@@ -77,7 +78,7 @@ func (th *TaskHandler) Update(c *gin.Context) {
 	id, err := strconv.Atoi(idStr)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid ID"})
+		respondWithError(c, apperrors.BadRequest("invalid ID parameter", nil))
 		return
 	}
 
@@ -85,11 +86,11 @@ func (th *TaskHandler) Update(c *gin.Context) {
 
 	err = c.ShouldBindJSON(&input)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad json data"})
+		respondWithError(c, apperrors.BadRequest("invalid json data", nil))
 	}
 	task, err := th.service.Update(id, input)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Some error"})
+		respondWithError(c, err)
 		return
 	}
 
