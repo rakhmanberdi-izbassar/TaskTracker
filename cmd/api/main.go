@@ -10,6 +10,7 @@ import (
 	"github.com/rakhmanberdi-izbassar/TaskTracker/internal/service"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 func main() {
@@ -19,7 +20,9 @@ func main() {
 		return
 	}
 
-	taskRepo := repository.NewTaskRepository()
+	db, err := repository.NewPostgresDB(cnf)
+
+	taskRepo := repository.NewTaskRepository(db)
 	taskService := service.NewTaskService(taskRepo)
 	taskHandler := handler.NewTaskHandler(taskService)
 

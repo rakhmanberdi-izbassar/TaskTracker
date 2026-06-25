@@ -3,16 +3,17 @@ package model
 import "time"
 
 type Task struct {
-	ID          int       `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Status      string    `json:"status"`
-	UserID      int       `json:"user_id"`
-	DueDate     time.Time `json:"due_date"`
-	Priority    int       `json:"priority"`
+	ID          int       `json:"id" db:"id"`
+	Title       string    `json:"title" db:"title"`
+	Description string    `json:"description" db:"description"`
+	Status      string    `json:"status" db:"status"`
+	UserID      int       `json:"user_id" db:"user_id"`
+	DueDate     time.Time `json:"due_date" db:"due_date"`
+	Priority    int       `json:"priority" db:"priority"`
 
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	// НАЗАР АУДАРЫҢЫЗ: Базада сізде "create_at" және "update_at" деп құрылған (ортасында 'd' әрпі жоқ)
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }
 
 type CreateTaskInput struct {
