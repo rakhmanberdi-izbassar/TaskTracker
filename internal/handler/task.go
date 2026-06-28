@@ -88,11 +88,11 @@ func (th *TaskHandler) Update(c *gin.Context) {
 	if err != nil {
 		respondWithError(c, apperrors.BadRequest("invalid json data", nil))
 	}
-	task, err := th.service.Update(id, input)
+	updatedId, err := th.service.Update(id, input)
 	if err != nil {
 		respondWithError(c, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, task)
+	c.JSON(http.StatusOK, gin.H{"id": updatedId})
 }

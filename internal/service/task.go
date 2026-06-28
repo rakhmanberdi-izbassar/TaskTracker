@@ -61,17 +61,17 @@ func (ts *TaskService) Create(input model.CreateTaskInput) (int, error) {
 	return ts.repo.Create(task)
 }
 
-func (ts *TaskService) Update(id int, input model.UpdateTaskInput) (model.Task, error) {
+func (ts *TaskService) Update(id int, input model.UpdateTaskInput) (int, error) {
 	_, err := ts.repo.GetById(id)
 	if err != nil {
-		return model.Task{}, apperrors.NotFound("Task not found", nil)
+		return 0, apperrors.NotFound("Task not found", nil)
 	}
 
 	if input.Title != nil && *input.Title == "" {
-		return model.Task{}, apperrors.BadRequest("Task title is too short", nil)
+		return 0, apperrors.BadRequest("Task title is too short", nil)
 	}
 	if input.Description != nil && *input.Description == "" {
-		return model.Task{}, apperrors.BadRequest("Task description is too short", nil)
+		return 0, apperrors.BadRequest("Task description is too short", nil)
 	}
 
 	return ts.repo.Update(id, input)

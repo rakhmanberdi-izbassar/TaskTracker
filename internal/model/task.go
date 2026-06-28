@@ -11,7 +11,6 @@ type Task struct {
 	DueDate     time.Time `json:"due_date" db:"due_date"`
 	Priority    int       `json:"priority" db:"priority"`
 
-	// НАЗАР АУДАРЫҢЫЗ: Базада сізде "create_at" және "update_at" деп құрылған (ортасында 'd' әрпі жоқ)
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 }

@@ -7,5 +7,5 @@ type TaskRepoInterface interface {
 	GetById(id int) (model.Task, error)
 	Delete(id int) error
 	Create(task model.Task) (int, error)
-	Update(id int, input model.UpdateTaskInput) (model.Task, error)
+	Update(id int, input model.UpdateTaskInput) (int, error)
 }
